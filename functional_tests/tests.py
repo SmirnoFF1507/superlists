@@ -97,7 +97,7 @@ class NewVisitorTest(LiveServerTestCase):
         ## Мы используем новый сеанс браузера, тем самым обеспечивая, чтобы никакая
         ## информация от Эдит не прошла через данные cookie и пр.
         self.browser.quit()
-        time.sleep(5)
+        time.sleep(2)
         self.browser = webdriver.Firefox()
 
         # Фрэнсис посещает домашнюю страницу. Нет никаких признаков списка Эдит
@@ -110,7 +110,7 @@ class NewVisitorTest(LiveServerTestCase):
         inputbox = self.browser.find_element_by_id('id_new_item')
         inputbox.send_keys('Купить молоко')
         inputbox.send_keys(Keys.ENTER)
-        self.wait_for_row_in_list_table('Купить молоко')
+        self.wait_for_row_in_list_table('1: Купить молоко')
 
         # Фрэнсис получает уникальный url-адрес
         francis_list_url = self.browser.current_url
