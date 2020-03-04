@@ -1,3 +1,4 @@
+import os
 from selenium.common.exceptions import WebDriverException
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from selenium import webdriver
@@ -12,6 +13,9 @@ class NewVisitorTest(StaticLiveServerTestCase):
     def setUp(self):
         '''установка'''
         self.browser = webdriver.Firefox()
+        staging_server = os.environ.get('STAGING_SERVER')
+        if staging_server:
+            self.live_server_url = 'http://' + staging_server
         self.browser.set_window_size(766, 768)
 
     def tearDown(self):
