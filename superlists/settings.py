@@ -25,7 +25,7 @@ SECRET_KEY = 'w722@l836@*kw$r02821^afgf^b3$y+eoj2v4g_755i9k21dhd'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['andreypage.ru']
+ALLOWED_HOSTS = ['andreypage.ru','superlists.andreypage.ru','superlists-staging.andreypage.ru']
 
 
 # Application definition
