@@ -1,14 +1,16 @@
+from django.utils.html import escape
 from django.test import TestCase
 from lists.models import Item, List
 
 
 class HomePageTest(TestCase):
-    '''тест домашней страницы'''
+    """тест домашней страницы"""
 
     def test_uses_home_template(self):
-        '''тест: используется домашний шаблон'''
+        """тест: используется домашний шаблон"""
         response = self.client.get('/')
         self.assertTemplateUsed(response, 'home.html')
+
 
 class ListViewTest(TestCase):
     """тест представления списка"""
@@ -59,6 +61,20 @@ class NewListTest(TestCase):
         new_list = List.objects.first()
         self.assertRedirects(response, f'/lists/{new_list.id}/')
 
+    def test_validation_errors_are_sent_back_to_home_page_template(self):
+        """тест: ошибки валидации отсылаются назад в шаблон
+           домашней страницы"""
+        response = self.client.post('/lists/new', data={'item_text': ''})
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'home.html')
+        expected_error = escape("Элемент списка не может быть пустым")
+        self.assertContains(response, expected_error)
+
+    def test_invalid_list_items_arent_saved(self):
+        """тест: сохраняются недопустимые элементы списка"""
+        self.client.post('/lists/new', data={'item_text': ""})
+        self.assertEqual(List.objects.count(), 0)
+        self.assertEqual(Item.objects.count(), 0)
 
 class NewItemTest(TestCase):
     """тест нового элемента списка"""
