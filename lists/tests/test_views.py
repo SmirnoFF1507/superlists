@@ -1,3 +1,4 @@
+from unittest import skip
 from django.utils.html import escape
 from django.test import TestCase
 from lists.models import Item, List
@@ -29,7 +30,6 @@ class ListViewTest(TestCase):
 
     def test_passes_correct_list_to_template(self):
         """тест: передается правильный шаблон списка"""
-        other_list = List.objects.create()
         correct_list = List.objects.create()
         response = self.client.get(f'/lists/{correct_list.id}/')
         self.assertEqual(response.context['list'], correct_list)
@@ -52,7 +52,6 @@ class ListViewTest(TestCase):
 
     def test_can_save_a_POST_request_to_an_existing_list(self):
         """тест: можно сохранить post-запрос в существующий список"""
-        other_list = List.objects.create()
         correct_list = List.objects.create()
 
         self.client.post(
@@ -67,7 +66,6 @@ class ListViewTest(TestCase):
 
     def test_POST_redirects_to_list_view(self):
         """тест: POST-запрос переадресуется в представление списка"""
-        other_list = List.objects.create()
         correct_list = List.objects.create()
 
         response = self.client.post(
@@ -84,6 +82,13 @@ class ListViewTest(TestCase):
             f'/lists/{list_.id}/',
             data={'text': ''}
         )
+
+    def test_displays_item_form(self):
+        """тест отображения формы элемента"""
+        list_ = List.objects.create()
+        response = self.client.get(f'/lists/{list_.id}/')
+        self.assertIsInstance(response.context['form'], ItemForm)
+        self.assertContains(response, 'name="text"')
 
     def test_for_invalid_input_nothing_saved_to_db(self):
         """тест на недопустимый ввод: ничего не сохраняется в БД"""
@@ -106,12 +111,21 @@ class ListViewTest(TestCase):
         response = self.post_invalid_input()
         self.assertContains(response, escape(EMPTY_ITEM_ERROR))
 
-    def test_displays_item_form(self):
-        """тест отображения формы элемента"""
-        list_ = List.objects.create()
-        response = self.client.get(f'/lists/{list_.id}/')
-        self.assertIsInstance(response.context['form'], ItemForm)
-        self.assertContains(response, 'name="text"')
+    @skip
+    def test_duplicate_item_validation_errors_end_up_on_lists_page(self):
+        """тест: ошибки валидации повторяющегося элемента
+        оканчиваются на странице списков"""
+        list1 = List.objects.create()
+        item1 = Item.objects.create(list=list1, text='textey')
+        response = self.client.post(
+            f'/lists/{list1.id}/',
+            data={'text': 'textey'}
+        )
+
+        expected_error = escape("Этот элемент уже есть в списке")
+        self.assertContains(response, expected_error)
+        self.assertTemplateUsed(response, 'list.html')
+        self.assertEqual(Item.objects.all().count(), 1)
 
 
 class NewListTest(TestCase):
