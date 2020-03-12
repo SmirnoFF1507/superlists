@@ -5,7 +5,7 @@ import re
 from .base import FunctionalTest
 
 TEST_EMAIL = 'edith@example.com'
-SUBJECT = 'Ваша ссылка входа для Супер-блокнот'
+SUBJECT = 'Ваша ссылка для Суперблокнота'
 
 class LoginTest(FunctionalTest):
     """тест регистрации в системе"""
@@ -22,7 +22,7 @@ class LoginTest(FunctionalTest):
         # Появляется сообщение, которое говорит, что ей на почту
         # было выслано электронное письмо
         self.wait_for(lambda: self.assertIn(
-            'Check your email',
+            'Проверьте свою почту',
             self.browser.find_element_by_tag_name('body').text
         ))
 

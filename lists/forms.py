@@ -14,7 +14,7 @@ class ItemForm(forms.models.ModelForm):
         fields = ('text',)
         widgets = {
             'text': forms.fields.TextInput(attrs={
-                'placeholder': 'Enter a to-do item',
+                'placeholder': 'Добавить элемент',
                 'class': 'form-control input-lg',
             }),
         }
