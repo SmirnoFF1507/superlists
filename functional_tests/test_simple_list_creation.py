@@ -15,15 +15,15 @@ class NewVisitorTest(FunctionalTest):
 
         # Она видит, что заголовок и шапка страницы говорят о
         # списках неотложных дел
-        self.assertIn('To-Do', self.browser.title)
+        self.assertIn('Списки дел', self.browser.title)
         header_text = self.browser.find_element_by_tag_name('h1').text
-        self.assertIn('To-Do', header_text)
+        self.assertIn('Начать новый список', header_text)
 
         # Ей сразу же предлагается ввести элемент списка
         inputbox = self.get_item_input_box()
         self.assertEqual(
             inputbox.get_attribute('placeholder'),
-            'Enter a to-do item'
+            'Добавить элемент'
         )
 
         # Она набирает в текстовом поле "Купить павлиньи перья"
