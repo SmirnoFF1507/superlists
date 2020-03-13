@@ -1,5 +1,6 @@
 from accounts.models import User, Token
 
+
 class PasswordlessAuthenticationBackend(object):
     """беспарольный серверный процессор аутентификации"""
 
@@ -19,4 +20,3 @@ class PasswordlessAuthenticationBackend(object):
             return User.objects.get(email=email)
         except User.DoesNotExist:
             return None
-

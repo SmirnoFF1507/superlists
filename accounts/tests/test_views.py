@@ -1,7 +1,6 @@
 from accounts.models import Token
 from django.test import TestCase
 from unittest.mock import patch, call
-import accounts.views
 
 
 class SendLoginEmailViewTest(TestCase):
@@ -38,7 +37,7 @@ class SendLoginEmailViewTest(TestCase):
         self.assertEqual(mock_send_mail.called, True)
         (subject, body, from_email, to_list), kwargs = mock_send_mail.call_args
         self.assertEqual(subject, 'Ваша ссылка для Суперблокнота')
-        self.assertEqual(from_email, 'noreply@superlists')
+        self.assertEqual(from_email, 'andreypage@yandex.ru')
         self.assertEqual(to_list, ['edith@example.com'])
 
     def test_creates_token_associated_wih_email(self):
