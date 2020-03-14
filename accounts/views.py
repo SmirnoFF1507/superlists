@@ -30,14 +30,13 @@ def send_login_email(request):
 
 def login(request):
     """зарегистрировать вход в систему"""
-    print(request.GET.get('token'))
     user = PasswordlessAuthenticationBackend.authenticate(request, uid=request.GET.get('token'))
-    print(user)
     if user:
         auth.login(request, user)
     return redirect('/')
 
+
 def logout(request):
- '''выход из системы'''
- auth_logout(request)
- return redirect('/')
+    """выход из системы"""
+    auth_logout(request)
+    return redirect('/')
