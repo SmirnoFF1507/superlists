@@ -18,7 +18,7 @@ def send_login_email(request):
     send_mail(
         'Ваша ссылка для Суперблокнота',
         message_body,
-        'andreypage@yandex.ru',
+        'smirnof1507@yandex.ru',
         [email]
     )
     messages.success(
